@@ -1,0 +1,51 @@
+/*
+ * VS Code Markdown preview — custom styling
+ *
+ * Why:
+ *   VS Code's built-in preview renders body text as pure white on near-black,
+ *   spans the full editor width, and uses `strong { font-weight: 600 }`.
+ *   Result: bold barely registers, long lines tire the eye, hierarchy is flat.
+ *
+ * What this changes (the outcome):
+ *   - Caps line length at ~800px so the eye's return-trip stays short
+ *     (70–80 char measure, the typography rule of thumb for body copy).
+ *   - Softens body text from #fff to #e6e6e6 — reduces dark-mode glare and,
+ *     paradoxically, *increases* perceived contrast against bold.
+ *   - Keeps `strong` at pure white + weight 700. The two-axis lift
+ *     (color + weight) makes bold read as "obviously bold" without needing
+ *     extreme weight.
+ *
+ * How it's loaded:
+ *   `markdown.styles` in VS Code user settings:
+ *     "markdown.styles": [
+ *       "https://davidheryanto.github.io/dotvscode/markdown-preview.css"
+ *     ]
+ *   `markdown.styles` only accepts https URLs or workspace-relative paths
+ *   (absolute fs paths are rejected — webview security). GitHub Pages
+ *   serves .css with the correct `Content-Type: text/css` so the webview
+ *   actually applies it (gist raw URLs serve `text/plain` + nosniff and
+ *   are silently rejected).
+ *
+ * Reload the preview after edits — VS Code caches the fetched stylesheet
+ * for the session, and GitHub Pages caches edge responses for a few
+ * minutes.
+ */
+
+/* Cap line length for comfortable reading (~70–80 char measure). */
+body {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 32px 40px;
+  line-height: 1.7;
+}
+
+/* Soften pure white → reduces glare, sharpens bold hierarchy. */
+.vscode-dark,
+.vscode-high-contrast:not(.vscode-high-contrast-light) {
+  color: #e6e6e6;
+}
+
+strong, b {
+  font-weight: 700;
+  color: #ffffff;
+}
