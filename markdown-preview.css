@@ -9,11 +9,12 @@
  * What this changes (the outcome):
  *   - Caps line length at ~800px so the eye's return-trip stays short
  *     (70–80 char measure, the typography rule of thumb for body copy).
- *   - Softens body text from #fff to #e6e6e6 — reduces dark-mode glare and,
- *     paradoxically, *increases* perceived contrast against bold.
- *   - Keeps `strong` at pure white + weight 700. The two-axis lift
+ *   - Softens body text away from the theme extreme (#fff on dark, #000 on
+ *     light) — reduces glare and, paradoxically, *increases* perceived
+ *     contrast against bold.
+ *   - Pushes `strong` to the theme extreme + weight 700. The two-axis lift
  *     (color + weight) makes bold read as "obviously bold" without needing
- *     extreme weight.
+ *     extreme weight. Scoped per theme so bold stays visible on light too.
  *
  * How it's loaded:
  *   `markdown.styles` in VS Code user settings:
@@ -39,13 +40,30 @@ body {
   line-height: 1.7;
 }
 
-/* Soften pure white → reduces glare, sharpens bold hierarchy. */
+/* Soften body text away from the theme extreme. */
 .vscode-dark,
 .vscode-high-contrast:not(.vscode-high-contrast-light) {
   color: #e6e6e6;
 }
 
+.vscode-light,
+.vscode-high-contrast-light {
+  color: #1a1a1a;
+}
+
 strong, b {
   font-weight: 700;
+}
+
+/* Push bold to the theme extreme for the two-axis lift. */
+.vscode-dark strong, .vscode-dark b,
+.vscode-high-contrast:not(.vscode-high-contrast-light) strong,
+.vscode-high-contrast:not(.vscode-high-contrast-light) b {
   color: #ffffff;
+}
+
+.vscode-light strong, .vscode-light b,
+.vscode-high-contrast-light strong,
+.vscode-high-contrast-light b {
+  color: #000000;
 }
